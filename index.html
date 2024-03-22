@@ -2,40 +2,40 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Auth Redirect Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Request Example</title>
 </head>
 <body>
-    <h1>Processing...</h1>
+    <h1>API Response</h1>
+    <pre id="apiResponse">Loading...</pre>
+
     <script>
-        // Simplified function to send a test POST request
-        function sendTestPostRequest() {
-            // Test data
-            const testData = { test: 'This is a test payload' };
+        // Define the URL and the payload
+        const url = "https://ljvqvjdjjgyxrggccdxr.supabase.co/functions/v1/plaid-token";
+        const payload = {
+            clientUserId: "unique_user_id"
+        };
 
-            // Send POST request to the webhook
-            fetch('https://webhook.site/6e6eb7ee-db4d-4d7b-9b43-53906f9c387e', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(testData),
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.text();
-            })
-            .then(data => {
-                console.log('Success:', data);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        }
+        // Define the headers
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxqdnF2amRqamd5eHJnZ2NjZHhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDk2OTE0MTksImV4cCI6MjAyNTI2NzQxOX0.MNF610l3UkwJzRwIZJb839y3aMvyVXxxHupnNiAd_kQ'
+        };
 
-        // Execute the function when the page loads
-        document.addEventListener('DOMContentLoaded', sendTestPostRequest);
+        // Make the request using Fetch API
+        fetch(url, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(payload)
+        })
+        .then(response => response.text())
+        .then(text => {
+            document.getElementById('apiResponse').textContent = text;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('apiResponse').textContent = 'An error occurred while fetching the API response.';
+        });
     </script>
 </body>
 </html>
